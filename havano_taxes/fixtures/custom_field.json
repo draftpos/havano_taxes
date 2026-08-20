@@ -1,0 +1,92 @@
+[
+  {
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice Item",
+    "fieldname": "custom_havano_tax_section",
+    "label": "Havano Tax Details",
+    "fieldtype": "Section Break",
+    "insert_after": "item_tax_rate",
+    "collapsible": 1,
+    "collapsible_depends_on": "eval:doc.custom_fiscal_tax_group",
+    "hidden": 0,
+    "print_hide": 1,
+    "no_copy": 0
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice Item",
+    "fieldname": "custom_fiscal_tax_group",
+    "label": "Fiscal Tax Group",
+    "fieldtype": "Data",
+    "insert_after": "custom_havano_tax_section",
+    "read_only": 1,
+    "bold": 1,
+    "in_list_view": 1,
+    "print_hide": 0,
+    "no_copy": 1,
+    "allow_on_submit": 1,
+    "description": "VAT, ZERO RATED, or EXEMPT — sent to ZIMRA fiscalisation"
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice Item",
+    "fieldname": "custom_tax_category",
+    "label": "Tax Category",
+    "fieldtype": "Link",
+    "options": "Tax Category",
+    "insert_after": "custom_fiscal_tax_group",
+    "read_only": 1,
+    "print_hide": 1,
+    "no_copy": 1,
+    "allow_on_submit": 1
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice Item",
+    "fieldname": "custom_col_break_1",
+    "label": "",
+    "fieldtype": "Column Break",
+    "insert_after": "custom_tax_category",
+    "print_hide": 1
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice Item",
+    "fieldname": "custom_item_tax_template",
+    "label": "Item Tax Template (Resolved)",
+    "fieldtype": "Link",
+    "options": "Item Tax Template",
+    "insert_after": "custom_col_break_1",
+    "read_only": 1,
+    "print_hide": 1,
+    "no_copy": 1,
+    "allow_on_submit": 1,
+    "description": "The template selected by havano_taxes for this item"
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice Item",
+    "fieldname": "custom_tax_rate",
+    "label": "Tax Rate (%)",
+    "fieldtype": "Float",
+    "insert_after": "custom_item_tax_template",
+    "read_only": 1,
+    "print_hide": 1,
+    "no_copy": 1,
+    "allow_on_submit": 1,
+    "precision": "2"
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice Item",
+    "fieldname": "custom_tax_account",
+    "label": "Tax Account",
+    "fieldtype": "Link",
+    "options": "Account",
+    "insert_after": "custom_tax_rate",
+    "read_only": 1,
+    "print_hide": 1,
+    "no_copy": 1,
+    "allow_on_submit": 1
+  }
+]
