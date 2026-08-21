@@ -91,18 +91,30 @@ def resolve_item_tax(
     if not item_tax_rows:
         item_group = frappe.get_cached_value("Item", item_code, "item_group")
         if item_group:
-            item_tax_rows = frappe.get_all(
-                "Item Tax",
-                filters={"parent": item_group, "parenttype": "Item Group"},
-                fields=[
-                    "item_tax_template",
-                    "tax_category",
-                    "valid_from",
-                    "minimum_net_rate",
-                    "maximum_net_rate",
-                ],
-                order_by="valid_from desc",
-            )
+            lft_rgt = frappe.get_cached_value("Item Group", item_group, ["lft", "rgt"])
+            if lft_rgt:
+                lft, rgt = lft_rgt
+                ancestor_groups = frappe.db.sql_list(
+                    """select name from `tabItem Group`
+                    where lft <= %s and rgt >= %s order by lft desc""",
+                    (lft, rgt),
+                )
+                
+                for group in ancestor_groups:
+                    item_tax_rows = frappe.get_all(
+                        "Item Tax",
+                        filters={"parent": group, "parenttype": "Item Group"},
+                        fields=[
+                            "item_tax_template",
+                            "tax_category",
+                            "valid_from",
+                            "minimum_net_rate",
+                            "maximum_net_rate",
+                        ],
+                        order_by="valid_from desc",
+                    )
+                    if item_tax_rows:
+                        break
 
     if not item_tax_rows:
         return None
