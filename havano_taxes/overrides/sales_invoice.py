@@ -132,7 +132,7 @@ def on_before_submit(doc, method=None):
                 _(
                     "Row {row}: Item <b>{item}</b> — no valid Item Tax Template was "
                     "found for company <b>{company}</b>. Configure an Item Tax row "
-                    "on the Item master."
+                    "on the Item master or its Item Group."
                 ).format(
                     row=item.idx,
                     item=item.item_code,

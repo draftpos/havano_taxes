@@ -89,6 +89,22 @@ def resolve_item_tax(
     )
 
     if not item_tax_rows:
+        item_group = frappe.get_cached_value("Item", item_code, "item_group")
+        if item_group:
+            item_tax_rows = frappe.get_all(
+                "Item Tax",
+                filters={"parent": item_group, "parenttype": "Item Group"},
+                fields=[
+                    "item_tax_template",
+                    "tax_category",
+                    "valid_from",
+                    "minimum_net_rate",
+                    "maximum_net_rate",
+                ],
+                order_by="valid_from desc",
+            )
+
+    if not item_tax_rows:
         return None
 
     # ------------------------------------------------------------------
