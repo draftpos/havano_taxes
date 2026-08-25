@@ -86,6 +86,7 @@ def resolve_item_tax(
             "maximum_net_rate",
         ],
         order_by="valid_from desc",
+        ignore_permissions=True,
     )
 
     if not item_tax_rows:
@@ -112,6 +113,7 @@ def resolve_item_tax(
                             "maximum_net_rate",
                         ],
                         order_by="valid_from desc",
+                        ignore_permissions=True,
                     )
                     if item_tax_rows:
                         break
@@ -204,6 +206,7 @@ def _get_template_tax_details(template_name: str, company: str) -> tuple[str, fl
         filters={"parent": template_name},
         fields=["tax_type", "tax_rate"],
         limit=1,
+        ignore_permissions=True,
     )
 
     if not rows:
@@ -216,6 +219,7 @@ def _get_template_tax_details(template_name: str, company: str) -> tuple[str, fl
                 filters={"parent": scoped_name},
                 fields=["tax_type", "tax_rate"],
                 limit=1,
+                ignore_permissions=True,
             )
 
     if rows:
