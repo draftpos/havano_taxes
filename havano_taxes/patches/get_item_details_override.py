@@ -110,8 +110,8 @@ def get_item_details(args, doc=None, for_validate=False, overwrite_warehouse=Tru
     tax_rate    = result.get("tax_rate", 0.0)
     template    = result.get("item_tax_template")
 
-    if tax_account:
-        out["item_tax_rate"]     = build_item_tax_rate_json(tax_account, tax_rate)
+    if template or tax_account:
+        out["item_tax_rate"]     = build_item_tax_rate_json(result.get("tax_details_dict", {}))
         out["item_tax_template"] = template
 
     # Also inject the custom fields so the client-side JS can display
@@ -123,3 +123,4 @@ def get_item_details(args, doc=None, for_validate=False, overwrite_warehouse=Tru
     out["custom_tax_account"]        = tax_account or ""
 
     return out
+

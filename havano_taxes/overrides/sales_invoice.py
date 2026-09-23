@@ -86,7 +86,7 @@ def _resolve_all_items(doc):
 
         # Set item_tax_rate — ERPNext reads this in calculate_taxes_and_totals()
         # to apply per-item rate overrides on each Taxes and Charges row.
-        new_rate_json = build_item_tax_rate_json(result["tax_account"], result["tax_rate"])
+        new_rate_json = build_item_tax_rate_json(result.get("tax_details_dict", {}))
         item.item_tax_rate = new_rate_json
 
         # Also update the item_tax_template field on the invoice line so the
@@ -176,3 +176,4 @@ def on_before_submit(doc, method=None):
             msg,
             title=_("Cannot Submit — Tax Configuration Issues"),
         )
+
