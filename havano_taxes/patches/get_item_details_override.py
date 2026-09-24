@@ -111,7 +111,25 @@ def get_item_details(args, doc=None, for_validate=False, overwrite_warehouse=Tru
     template    = result.get("item_tax_template")
 
     if template or tax_account:
-        out["item_tax_rate"]     = build_item_tax_rate_json(result.get("tax_details_dict", {}))
+        tax_details = result.get("tax_details_dict", {})
+        if not tax_details and result.get("fiscal_tax_group") in ("ZERO RATED", "EXEMPT", "ZERO-RATED"):
+            # If we have the doc, inject 0% for its tax accounts
+            _doc = None
+            if doc:
+                if isinstance(doc, str):
+                    try:
+                        _doc = frappe.parse_json(doc)
+                    except Exception:
+                        pass
+                else:
+                    _doc = doc
+            if _doc and _doc.get("taxes"):
+                for t in _doc.get("taxes"):
+                    acc = t.get("account_head")
+                    if acc:
+                        tax_details[acc] = 0.0
+
+        out["item_tax_rate"]     = build_item_tax_rate_json(tax_details)
         out["item_tax_template"] = template
 
     # Also inject the custom fields so the client-side JS can display
