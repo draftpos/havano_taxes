@@ -86,7 +86,13 @@ def _resolve_all_items(doc):
 
         # Set item_tax_rate — ERPNext reads this in calculate_taxes_and_totals()
         # to apply per-item rate overrides on each Taxes and Charges row.
-        new_rate_json = build_item_tax_rate_json(result.get("tax_details_dict", {}))
+        tax_details = result.get("tax_details_dict", {})
+        if not tax_details and result["fiscal_tax_group"] in ("ZERO RATED", "EXEMPT", "ZERO-RATED"):
+            for t in doc.get("taxes") or []:
+                if t.account_head:
+                    tax_details[t.account_head] = 0.0
+
+        new_rate_json = build_item_tax_rate_json(tax_details)
         item.item_tax_rate = new_rate_json
 
         # Also update the item_tax_template field on the invoice line so the
